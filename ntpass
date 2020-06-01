@@ -1,0 +1,53 @@
+#!/bin/bash
+
+#
+# Simpelt script för att nuka windows pass
+#
+
+
+HIVE=/mnt/${SRC2}/Windows/System32/config/[Ss][Aa][Mm]
+
+
+clear
+
+read -r -p $'\x0aMounta kunds disk? y/n ' yn
+	
+if [[ $yn == "y" || $yn == "Y" ]]; then
+	lsblk
+	read -r -p $'\x0aVilken disk är kundens WINDOWS disk? ' SRC1
+
+	echo -e "Vart ska windows disken mountas? "
+	ls /mnt
+	read -r -p $'\x0aVälj en katalog. ' SRC2
+
+    select mpoint in "${SRC2}"; do
+	    case $mpoint in
+               "${SRC2}")
+	    	  ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/${SRC2}
+		break
+	    ;;
+    "exit")
+	    exit
+	 ;;
+esac
+done 
+
+
+    if
+     	chntpw -l $HIVE
+     then     
+
+	 echo "Enter the user to clear password (hex needed. ex. If the user has 03e8 next to their username.
+	 You need to enter 0x03e8)"
+	 
+	read SamUser
+
+	chntpw -u $SamUser $HIVE
+
+     else
+
+	echo "ingen disk mountad?"
+
+ fi
+fi
+

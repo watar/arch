@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#
+# Script för att mounta diskar.
+#
+
+CLEAR="/usr/bin/clear"
+
+$CLEAR
+lsblk
+
+echo "Vilken disk och part ska mountas? ( ex. sda4 )"
+    read HDD
+echo "Vart ska den mountas? ( ex. /mnt/disk1, disk2 o.sv"
+echo ""
+echo "Välj ett alternativ"
+    select mpoint in "disk1" "disk2" "disk3" "disk4" "exit"; do
+    case $mpoint in
+	disk1 ) mount -t hfs /dev/$HDD /mnt/disk1; mount -t hfsplus /dev/$HDD /mnt/disk1; apfs-fuse -o allow_other /dev/$HDD /mnt/disk1; break;;
+	disk2 ) mount -t hfs /dev/$HDD /mnt/disk1; mount -t hfsplus /dev/$HDD /mnt/disk2; apfs-fuse -o allow_other /dev/$HDD /mnt/disk2; break;;
+	disk3 ) mount -t hfs /dev/$HDD /mnt/disk1; mount -t hfsplus /dev/$HDD /mnt/disk3; apfs-fuse -o allow_other /dev/$HDD /mnt/disk3; break;;
+	disk4 ) mount -t hfs /dev/$HDD /mnt/disk1; mount -t hfsplus /dev/$HDD /mnt/disk4; apfs-fuse -o allow_other /dev/$HDD /mnt/disk4; break;;
+#	backupserver ) mount -t cifs servernamn o.sv när nrkp nät är användbart.
+	"exit" ) exit;;
+    esac
+done
+
+echo "För att mounta en disk till kör scriptet igen. "

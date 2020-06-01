@@ -1,0 +1,1 @@
+//10.120.20.80/backup/ /mnt/backupserver cifs username=backup,password=backup

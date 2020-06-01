@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#
+# simpelt file extension copy script av Helleren nrkp
+#
+
+#
+# Katalogen vi temp dumpar allt, kan också ändras till en kunds externa disk om så eller om man
+# mountar kundens externa disk till den katalogen
+#
+
+DSTDIR="/mnt/alinabackup/recoverydmp"
+
+#
+# Kollar om katalogerna vi kommer dela upp sakerna i existerar, om dom inte finns så skapas dom
+# Om nya kataloger behövs så måste dom antigen skapas manuellt eller läggas med i if statement
+# nedan, det borde inte va rocketscience hur upplägget är. Glöm bara inte att varje if måste stängas
+# med ett fi :p
+#
+
+if [ ! -d "$DSTDIR/bilder" ];
+    then mkdir $DSTDIR/bilder;
+
+    if [ ! -d "$DSTDIR/dokument" ];
+        then mkdir $DSTDIR/dokument;
+    
+         if [ ! -d "$DSTDIR/video" ];
+	    then mkdir $DSTDIR/video;
+    
+	    if [ ! -d "$DSTDIR/musik" ];
+	        then mkdir $DSTDIR/musik;
+    
+	    fi 
+	 fi
+    fi 
+fi
+
+#
+# find letar upp dom speccade filändelserna case IN sensitive och kopierar till relevanta dirs.
+# 
+#
+
+
+find . -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.bmp' \) -exec cp -v {} $DSTDIR/bilder \;
+find . -type f \( -iname '*.mp3' -o -iname '*.flac' \) -exec cp -v {} $DSTDIR/musik \;
+find . -type f \( -iname '*.doc' -o -iname '*.docx' -o -iname '*.xls' -o -iname '*.pdf' \) -exec cp -v {} $DSTDIR/dokument \;
+find . -type f \( -iname '*.mpg' -o -iname '*.mpeg' -o -iname '*.mov' -o -iname '*.mp4' -o -iname '*.flv' \) -exec cp -v {} $DSTDIR/video \;
+
+echo "Allt klart!"

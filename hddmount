@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#
+# Script för att mounta hårddiskar
+#
+
+lsblk
+read -r -p $'\x0aVilken disk ska mountas ' SRC1
+echo -e '\n'
+ls /mnt | grep "disk"
+read -r -p $'\x0aVart ska den mountas? ' SRC2
+ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/${SRC2}

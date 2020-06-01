@@ -1,0 +1,51 @@
+#!/bin/bash
+CLEAR="/usr/bin/clear"
+$CLEAR
+[[ "$1" == "" ]] && echo -e "\a\a\aNo Destination!!!\a\a\a" && exit 1
+dest="/mnt/backupserver/$1"
+[[ "$1" == /* ]] && dest="$1"
+echo Creating and fixing stuffs for "$dest"
+date
+df -h "$dest"
+su -s /bin/bash -c "mkdir -p -v \"$dest\"" root
+#in case su failed, do it the old way.
+mkdir -p -v "$dest"
+echo And now we start copying stuff from current dir to $dest
+#Moved idhandling (hopefully) to mounting of the ntfs script instead --perms --owner
+rsync -avuS --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-group -S --numeric-ids \
+--exclude [pP]age[fF]ile.sys --exclude [hH]iber[fF]il.sys --exclude [sS]wap[fF]ile.sys \
+--exclude "[tT]emporary [iI]nternet [fF]iles" --exclude RECYCLER \
+--exclude "System Volume Information" \
+--exclude "NVIDIA/DisplayDriver" \
+--exclude "\$hf_mig\$" \
+--exclude "\$Recycle.Bin" --exclude "\$RECYCLE.BIN" \
+--exclude "Program Files/F-Secure Internet Security" \
+--exclude "ProgramData/Microsoft/OEMOffice14" \
+--exclude "ProgramData/Microsoft/Office14" \
+--exclude "ProgramData/Microsoft/OEMOffice15" \
+--exclude "ProgramData/Microsoft/Office15" \
+--exclude "[pP]erf[lL]ogs" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[wW]in[sS]x[sS]" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/KB9*.log" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/\$NtUninstall*\$" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/ServicePackFiles" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/Installer" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/ie8updates" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[hH]elp" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/SysWOW64" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[sS]ystem32/dllcache" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[sS]ystem32/spool/drivers" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[sS]ystem32/[rR]einstall[bB]ackups" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[sS]ystem32/wbem" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[dD]ebug" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]/[sS]ervicing" \
+--exclude "[wW][iI][nN][dD][oO][wW][sS]10[uU]pgrade" \
+--exclude "SoftwareDistribution/Download" \
+--exclude "SoftwareDistribution/DataStore" \
+--exclude "[cC]hrome/User Data/Default/*[cC]ache*" \
+--exclude "*[cC]ache[sS]torage" \
+--exclude "[cC]hrome/User Data/Default/*[eE]xtensions" \
+--exclude "*[cC]atroot" \
+. "$dest"
+chown -R 1001:1001 "$dest"
+echo "Backup $1 is done"
