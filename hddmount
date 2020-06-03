@@ -3,10 +3,16 @@
 #
 # Script för att mounta hårddiskar
 #
-
+/usr/bin/clear
 lsblk
-read -r -p $'\x0aVilken disk ska mountas ' SRC1
+read -r -p $'\x0aVilken disk ska mountas? ' SRC1
 echo -e '\n'
-ls /mnt | grep "disk"
-read -r -p $'\x0aVart ska den mountas? ' SRC2
-ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/${SRC2}
+echo "Vart ska den mountas?"
+select SRC2 in "disk1" "disk2" "disk3" "disk4"; do
+    case $SRC2 in
+	disk1 ) ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/disk1; break;;
+	disk2 ) ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/disk2; break;;
+	disk3 ) ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/disk3; break;;
+	disk4 ) ntfsfix /dev/$SRC1 ; mount /dev/${SRC1} /mnt/disk4; break;;
+    esac
+done
