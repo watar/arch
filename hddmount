@@ -1,8 +1,4 @@
 #!/bin/bash
-
-#
-# Script för att mounta hårddiskar
-#
 /usr/bin/clear
 lsblk
 read -r -p $'\x0aVilken disk ska mountas? ' SRC1
