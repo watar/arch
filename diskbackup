@@ -4,15 +4,10 @@ $CLEAR
 [[ "$1" == "" ]] && echo -e "\a\a\aNo Destination!!!\a\a\a" && exit 1
 dest="/mnt/backupserver/$1"
 [[ "$1" == /* ]] && dest="$1"
-echo Creating and fixing stuffs for "$dest"
-date
 df -h "$dest"
 su -s /bin/bash -c "mkdir -p -v \"$dest\"" root
-#in case su failed, do it the old way.
 mkdir -p -v "$dest"
-echo And now we start copying stuff from current dir to $dest
-#Moved idhandling (hopefully) to mounting of the ntfs script instead --perms --owner
-rsync -avuS --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-group -S --numeric-ids \
+rsync -avuS --verbose --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-group -S --numeric-ids \
 --exclude [pP]age[fF]ile.sys --exclude [hH]iber[fF]il.sys --exclude [sS]wap[fF]ile.sys \
 --exclude "[tT]emporary [iI]nternet [fF]iles" --exclude RECYCLER \
 --exclude "System Volume Information" \
@@ -47,5 +42,5 @@ rsync -avuS --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-gr
 --exclude "[cC]hrome/User Data/Default/*[eE]xtensions" \
 --exclude "*[cC]atroot" \
 . "$dest"
-chown -R 1001:1001 "$dest"
+echo Copy done, permissions fixed.
 echo "Backup $1 is done"

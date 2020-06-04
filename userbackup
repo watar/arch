@@ -1,0 +1,45 @@
+#!/bin/bash
+/usr/bin/clear
+[[ "$1" == "" ]] && echo -e "\a\a\aNo Destination!!!\a\a\a" && exit 1
+dest="/mnt/backupserver/$1"
+[[ "$1" == /* ]] && dest="$1"
+lsblk
+read -r -p $'\x0aWhich partition do you want to mount? ' SRC1
+ntfsfix /dev/$SRC1 ; mount /dev/$SRC1 /mnt/disk1
+/usr/bin/clear
+echo "List of Windows users on this partition:"
+echo "------------------------------------------------------"
+ls /mnt/disk1/Users
+echo "------------------------------------------------------"
+read -r -p "Enter user to backup:" USER
+backup_files=( "/mnt/disk1/Users/${USER}/Desktop"
+"/mnt/disk1/Users/${USER}/Documents"
+"/mnt/disk1/Users/${USER}/Pictures"
+"/mnt/disk1/Users/${USER}/SkyDrive"
+"/mnt/disk1/Users/${USER}/Dropbox"
+"/mnt/disk1/Users/${USER}/Videos"
+"/mnt/disk1/Users/${USER}/SkyDrive"
+"/mnt/disk1/Users/${USER}/Saved Games"
+"/mnt/disk1/Users/${USER}/OneDrive"
+"/mnt/disk1/Users/${USER}/Google Drive"
+"/mnt/disk1/Users/${USER}/Music"
+"/mnt/disk1/Users/${USER}/Favorites"
+"/mnt/disk1/Users/${USER}/Downloads"
+"/mnt/disk1/SIE"
+"/mnt/disk1/ProgramData/SPCS"
+"/mnt/disk1/SPCSFiler"
+"/mnt/disk1/Users/${USER}/AppData/Local/Microsoft/Windows Mail"
+"/mnt/disk1/Users/${USER}/AppData/Local/Microsoft/Outlook"
+"/mnt/disk1/Users/${USER}/AppData/Local/Microsoft/Windows Live Mail"
+"/mnt/disk1/Users/${USER}/AppData/Local/Microsoft/Windows Live/Contacts"
+"/mnt/disk1/Users/${USER}/AppData/Local/Google/Chrome/User Data/Default/Bookmarks"
+"/mnt/disk1/Users/${USER}/AppData/Roaming/Mozilla/Firefox/Profiles"
+"/mnt/disk1/Users/${USER}/AppData/Roaming/eM Client"
+"/mnt/disk1/Users/${USER}/AppData/Roaming/Thunderbird/Profiles" )
+target="/$dest/$USER"
+mkdir -p -v "${target}"
+for ((i =0; i < ${#backup_files[@]}; i++))
+do
+    rsync -avuS --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-group -S --numeric-ids "${backup_files[$i]}" "${target}"
+done
+echo -e "\n\nBackup done!"
