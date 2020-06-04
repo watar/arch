@@ -42,6 +42,5 @@ rsync -avuS --verbose --progress --numeric-ids --chmod=u=rwX --no-owner --no-per
 --exclude "[cC]hrome/User Data/Default/*[eE]xtensions" \
 --exclude "*[cC]atroot" \
 . "$dest"
-chown -R 1001:1001 "$dest"
 echo Copy done, permissions fixed.
 echo "Backup $1 is done"

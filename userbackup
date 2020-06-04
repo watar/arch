@@ -42,5 +42,4 @@ for ((i =0; i < ${#backup_files[@]}; i++))
 do
     rsync -avuS --progress --numeric-ids --chmod=u=rwX --no-owner --no-perms --no-group -S --numeric-ids "${backup_files[$i]}" "${target}"
 done
-chown -R 1001:1001 "$dest"
 echo -e "\n\nBackup done!"
