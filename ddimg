@@ -1,0 +1,12 @@
+#!/bin/bash
+/usr/bin/clear
+[[ "$1" == "" ]] && echo -e "\a\a\aNo Destination!!!\a\a\a" && exit 1
+dest="/mnt/backupserver/$1"
+[[ "$1" == /* ]] && dest="$1"
+lsblk
+read -r -p $'\x0aWhich partition do you want to make an image of? ' src1
+mkdir -p "$dest"
+cd $dest
+ddrescue -d -r3 /dev/$src1 $src1.img $src1.log
+
+echo -e "\n\nImage done!"
