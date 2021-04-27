@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# 
+# Script för att låsa upp bitlocker encryption och sen mounta upp det hela.
+#
+
+CLEAR="/usr/bin/clear"
+DISLOCKER="/mnt/.dislocker"
+MNTDIR="/mnt"
+
+$CLEAR
+lsblk
+
+echo ""
+
+echo "Välj vilken disk som är SOURCE, alltså disken som ska backupas ifrån"
+    read SRC1
+
+echo ""
+
+read -r -p  $'\x0aLåsa upp med recovery key? (Den super långa) y/n (välj n/N ifall du vill ange användarelösen istället) ' jn
+
+if [[ $jn == "y" || $jn == "Y" ]]; then
+echo ""
+ls $MNTDIR
+echo ""
+read -r -p $'\x0avart ska disken mountas ' DST1
+echo ""
+echo "Välj ett alternativ"
+    	select mpoint in "$DST1" "exit"; do
+    	  case $mpoint in
+	$DST1 ) dislocker -r -p /dev/$SRC1 $DISLOCKER ; mount -o loop,ro,nonempty $DISLOCKER/dislocker-file $MNTDIR/$DST1;  break;;
+	"exit" ) exit
+	;;
+    esac
+done
+else
+	echo ""
+	ls $MNTDIR
+	echo ""
+	read -r -p $'\x0avart ska disken mountas ' DST1
+	select mpoint in "$DST1" "exit"; do
+	  case $mpoint in
+	$DST1 ) dislocker -r -u /dev/$SRC1 $DISLOCKER ; mount -o loop,ro,nonempty $DISLOCKER/dislocker-file $MNTDIR/$DST1;  break
+	;;
+	"exit" ) exit
+	;;
+    esac
+  done
+fi
