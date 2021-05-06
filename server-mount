@@ -12,7 +12,7 @@ fi
 #NKPG
 if ping -c1 10.130.20.210 1>/dev/null 2>/dev/null
 then
-  mount -t cifs -o username=backup,password=backup //10.140.20.201/backup /mnt/backupserver
+  mount -t cifs -o username=backup,password=backup //10.130.20.210/backup /mnt/backupserver
 fi
 #EKG
 if ping -c1 10.120.20.80 1>/dev/null 2>/dev/null
