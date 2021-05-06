@@ -1,23 +1,19 @@
 #!/bin/sh
-
 # KH
 if ping -c1 10.11.20.10 1>/dev/null 2>/dev/null
 then
   mount -t cifs -o username=backup,password=backup //10.11.20.10/backup /mnt/backupserver
 fi
-
 #OS
 if ping -c1 10.140.20.201 1>/dev/null 2>/dev/null
 then
   mount -t cifs -o username=backup,password=backup //10.140.20.201/backup /mnt/backupserver
 fi
-
 #NKPG
 if ping -c1 10.130.20.210 1>/dev/null 2>/dev/null
 then
   mount -t cifs -o username=backup,password=backup //10.140.20.201/backup /mnt/backupserver
 fi
-
 #EKG
 if ping -c1 10.120.20.80 1>/dev/null 2>/dev/null
 then
